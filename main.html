@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For You, Mom 💖</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary-color: #e87db2;
+      --secondary-color: #f9d5e5;
+      --text-color: #5a4052;
+      --accent-color: #ff8fa3;
+      --bg-color: #fff8fa;
+    }
+    
+    html {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23e87db2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+    }
+    
+    .heart-trail {
+      position: absolute;
+      width: 5000px;
+      height: 5000px;
+      pointer-events: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff3366"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      animation: heart-float 1.2s ease-out forwards;
+      z-index: 9999;
+      transform-origin: center bottom;
+    }
+    
+    @keyframes heart-float {
+      0% {
+        opacity: 0;
+        transform: scale(0.4) translateY(0);
+      }
+      20% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.7) translateY(-20px);
+      }
+    }
+    
+    body {
+      background-color: var(--bg-color);
+      font-family: 'Georgia', serif;
+      color: var(--text-color);
+      line-height: 1.8;
+      overflow-x: hidden;
+      perspective: 1px;
+      height: 100vh;
+      overflow-y: auto;
+      margin: 0;
+    }
+    
+    .parallax-container {
+      position: relative;
+      height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      perspective: 1px;
+      scroll-behavior: smooth;
+    }
+    
+    .parallax-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateZ(-1px) scale(2);
+      z-index: -1;
+      background: url('/api/placeholder/1500/1500') center center;
+      background-size: cover;
+      background-attachment: fixed;
+      opacity: 0.2;
+    }
+    
+    .floating-flowers {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
+    
+    .flower {
+      position: absolute;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23e87db2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>') no-repeat;
+      width: 20px;
+      height: 20px;
+      animation: float 15s infinite linear;
+      opacity: 0.5;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.5;
+      }
+      90% {
+        opacity: 0.5;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(5px);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transform: translateZ(0);
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+    }
+    
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+    
+    h1::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+    }
+    
+    h1:hover {
+      color: var(--accent-color);
+      cursor: pointer;
+      transition: color 0.5s ease;
+      transform: scale(1.05);
+    }
+    
+    .story {
+      white-space: pre-line;
+      font-size: 1.2rem;
+      text-align: justify;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+    
+
+    .letter {
+        border: none;
+        padding: 2rem;
+        background: url('https://www.transparenttextures.com/patterns/old-map.png') repeat;
+        background-color: #f4e1b2; /* Light beige background like aged paper */
+        font-family: 'Dancing Script', cursive; /* Handwritten cursive font */
+        font-size: 1.4rem;
+        color: #4a3c2d; /* Dark brown text */
+        line-height: 1.8;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin: 2rem 0;
+        position: relative;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        transform: translateY(-10px);
+    }
+
+    .letter:before {
+        content: "✉️"; /* Envelope emoji */
+        font-size: 2rem;
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #e87db2;
+    }
+
+    .letter p {
+        text-indent: 30px;
+    }
+
+
+    
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 1.5rem;
+      color: var(--primary-color);
+      font-size: 1rem;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+      box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .heart {
+      display: inline-block;
+      color: var(--primary-color);
+      animation: heartbeat 1.5s infinite;
+    }
+    
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .content {
+        padding: 1.5rem;
+        margin: 1rem;
+        width: calc(100% - 2rem);
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .story {
+        font-size: 1rem;
+        padding: 0.5rem;
+      }
+      
+      .letter {
+        padding: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="parallax-container">
+    <div class="parallax-bg"></div>
+    <div class="floating-flowers" id="floating-flowers"></div>
+    
+    <div class="content">
+      <h1>For You, Mom 💖</h1>
+
+      <div class="story">
+        My mother had only one eye. I hated her... She was such an embarrassment.
+
+        She cooked for students and teachers to support the family. There was one day during elementary school when my mom came to say hello to me. I was so embarrassed.
+
+        How could she do this to me?
+
+        I ignored her, threw her a hateful look, and ran out. The next day at school one of my classmates said, "EWW, your mom only has one eye!" I wanted to sink into the floor. I wanted my mom to just disappear.
+
+        I confronted her that day:  
+        "Why don't you have the decency to just die?!"
+
+        My mother didn't respond. I didn't even stop to think for a second about what I had just said, because I was full of anger.
+
+        I was oblivious to her feelings. I wanted to leave that house, and her, behind. So I studied hard, got a scholarship, and moved to another city.
+
+        There, I lived in peace — with a beautiful wife, children of my own, and a nice job. I was proud of what I'd accomplished. One day, my mother came to visit me. It had been years. She stood outside my door, smiling. My daughter saw her and was terrified.
+
+        I screamed at her:  
+        "How dare you come to my house and scare my child?! GET OUT OF HERE RIGHT NOW!"
+
+        My mother quietly answered, "I'm sorry… I may have gotten the wrong address."
+
+        And she left.
+
+        A few days later, I received a letter from my old school. It was for a reunion. I lied to my wife, saying I had a business trip. After the reunion, I went by the old shack I used to call home… just out of curiosity.
+
+        It was rundown… and there, I found a letter:
+      </div>
+
+    <div class="letter">
+    <p>My dearest son,</p>
+    <p>I think of you all the time. I'm sorry I visited your house and scared your little girl. I was so happy when I heard you were coming to the reunion, but I may not be able to leave this room anymore to see you.</p>
+    <p>I'm sorry I embarrassed you all those years ago.</p>
+    <p>You see, when you were very little, you got into an accident and lost your eye. As a mother, I couldn't stand watching you grow up with one eye. So I gave you mine.</p>
+    <p>I was so proud of my son… who could see the world through my eye.</p>
+    <p>With all my love,</p>
+    <p>— Mom</p>
+    </div>
+
+
+      <footer>
+        Made with <span class="heart">❤</span><br>
+        Happy Mother's Day 🌷<br>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Create floating flower elements
+    function createFlowers() {
+      const container = document.getElementById('floating-flowers');
+      const flowerCount = 20;
+      
+      for (let i = 0; i < flowerCount; i++) {
+        const flower = document.createElement('div');
+        flower.className = 'flower';
+        flower.style.left = Math.random() * 100 + '%';
+        flower.style.animationDelay = Math.random() * 15 + 's';
+        flower.style.animationDuration = 15 + Math.random() * 10 + 's';
+        container.appendChild(flower);
+      }
+    }
+    
+    // Parallax effect
+    function parallaxEffect() {
+      const parallaxContainer = document.querySelector('.parallax-container');
+      
+      parallaxContainer.addEventListener('scroll', function() {
+        const scrolled = parallaxContainer.scrollTop;
+        document.querySelector('.parallax-bg').style.transform = 
+          'translateZ(-1px) scale(2) translateY(' + (scrolled * 0.5) + 'px)';
+      });
+    }
+    
+    // Heart trail cursor effect
+    function createHeartTrail() {
+      let throttle = false;
+      const throttleTime = 80; // Milliseconds between hearts for smoother effect
+      
+      document.addEventListener('mousemove', function(e) {
+        if (throttle) return;
+        throttle = true;
+        
+        setTimeout(() => {
+          throttle = false;
+        }, throttleTime);
+        
+        // Create heart element
+        const heart = document.createElement('div');
+        heart.className = 'heart-trail';
+        
+        // Position the heart where the cursor is, but offset to bottom of cursor
+        heart.style.left = (e.pageX - 6) + 'px';
+        heart.style.top = (e.pageY + 14) + 'px'; // Position below cursor
+        
+        // Add some subtle randomness to the hearts
+        const size = 8 + Math.random() * 4; // More consistent sizing
+        heart.style.width = size + 'px';
+        heart.style.height = size + 'px';
+        
+        // Add to document
+        document.body.appendChild(heart);
+        
+        // Remove heart after animation completes
+        setTimeout(() => {
+          if (heart && heart.parentNode) {
+            heart.parentNode.removeChild(heart);
+          }
+        }, 1200);
+      });
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      createFlowers();
+      parallaxEffect();
+      createHeartTrail();
+      
+      // Additional heartbeat effect for title on click
+      document.querySelector('h1').addEventListener('click', function() {
+        this.style.animation = 'heartbeat 1s';
+        setTimeout(() => {
+          this.style.animation = '';
+        }, 1000);
+      });
+    });
+  </script>
+</body>
+</html>
